@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class DetailActivity extends AppCompatActivity {
 
+    public static final String BACKDROP_BASE_PATH = "https://image.tmdb.org/t/p/w1280";
+    public static final String POSTER_BASE_PATH = "https://image.tmdb.org/t/p/w500";
     private Movie mMovie;
     private ImageView backdrop;
     private ImageView posterThumbnail;
@@ -31,8 +33,8 @@ public class DetailActivity extends AppCompatActivity {
 
         mMovie = (Movie) getIntent().getExtras().getSerializable("movie");
 
-        Picasso.get().load("https://image.tmdb.org/t/p/w1280".concat(mMovie.getBackdropPath())).into(backdrop);
-        Picasso.get().load("https://image.tmdb.org/t/p/w500".concat(mMovie.getPosterPath())).into(posterThumbnail);
+        Picasso.get().load(BACKDROP_BASE_PATH.concat(mMovie.getBackdropPath())).into(backdrop);
+        Picasso.get().load(POSTER_BASE_PATH.concat(mMovie.getPosterPath())).into(posterThumbnail);
 
         setTitle(mMovie.getTitle());
         String userRating = mMovie.getUserRating();

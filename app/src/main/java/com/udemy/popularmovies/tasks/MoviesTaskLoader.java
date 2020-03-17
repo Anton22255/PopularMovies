@@ -14,10 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.loader.content.AsyncTaskLoader;
 
 public class MoviesTaskLoader extends AsyncTaskLoader<List<Movie>> {
-    private static final String TAG = MoviesTaskLoader.class.getSimpleName();
-    public static final int ID = 101;
+
     private final String mFilter;
-    List<Movie> mGithubJson;
+    private List<Movie> mGithubJson;
 
     public MoviesTaskLoader(@NonNull Context context, String filter) {
         super(context);
@@ -41,7 +40,6 @@ public class MoviesTaskLoader extends AsyncTaskLoader<List<Movie>> {
         URL moviesRequestUrl = NetworkUtils.buildURL("movie", mFilter);
         try {
             String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(moviesRequestUrl);
-
             List<Movie> movieJsonData = MoviesJsonUtils.getMoviesStringsFromJson(jsonMovieResponse);
 
             return movieJsonData;

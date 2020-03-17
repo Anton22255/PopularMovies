@@ -12,7 +12,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class NetworkUtils {
 
-    public static final String KEY = "cc77263e88d3221dc890a327ff6efe19";
+    public static final String KEY = "";
     final static String QUERY_PARAM = "api_key";
     private static final String STATIC_MOVIE_DB_URL = "https://api.themoviedb.org";
     private static final String API_VERSION = "3";

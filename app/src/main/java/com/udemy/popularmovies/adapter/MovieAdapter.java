@@ -14,12 +14,10 @@ import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import static com.udemy.popularmovies.utils.NetworkUtils.KEY;
-
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapterViewHolder> {
-
     private static final String TAG = MovieAdapter.class.getSimpleName();
+    public static final String IMAGE_BASE_PATH = "https://image.tmdb.org/t/p/w780";
     private final MovieAdapterOnClickHandler mClickHandler;
     private List<Movie> movies;
 
@@ -41,8 +39,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     private void setMoviePostersOnline(final MovieAdapterViewHolder movieAdapterViewHolder, final int position) {
         String mMoviePosterPath = movies.get(position).getPosterPath();
-
-        String path = "https://image.tmdb.org/t/p/w780".concat(mMoviePosterPath);
+        String path = IMAGE_BASE_PATH.concat(mMoviePosterPath);
         Log.d(TAG, path);
         new Picasso.Builder(movieAdapterViewHolder.itemView.getContext())
                 .listener(new Picasso.Listener() {

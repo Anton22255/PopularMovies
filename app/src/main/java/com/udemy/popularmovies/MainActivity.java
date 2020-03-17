@@ -2,6 +2,7 @@ package com.udemy.popularmovies;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,12 +26,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private static final int MOVIE_LOADER = 11;
     private static final int TOP_RATED_LOADER = 22;
+    private static final String FILTER_STATE = "filter";
+    private static final String RECYCLER_POSITION = "RecyclerViewPosition";
 
     private MovieAdapter movieAdapter;
     private View loadingIndicator;
     private RecyclerView recyclerView;
 
-    String mFilterState = "popular";
+    private String mFilterState = "popular";
+    private Parcelable recyclerPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     public void onClick(Movie movie) {
-
         Intent movieDetailIntent = new Intent(MainActivity.this, DetailActivity.class);
         movieDetailIntent.putExtra("movie", movie);
         startActivity(movieDetailIntent);
@@ -79,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 setActionBarTitle(mFilterState);
                 return true;
         }
-        // If we got here the users's action was not recognized
         return super.onOptionsItemSelected(item);
     }
 
@@ -113,15 +115,43 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public void onLoaderReset(@NonNull Loader<List<Movie>> loader) {
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(FILTER_STATE, mFilterState);
+        outState.putParcelable(RECYCLER_POSITION,
+                recyclerView.getLayoutManager().onSaveInstanceState());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mFilterState = savedInstanceState.getString(FILTER_STATE);
+        recyclerPosition = savedInstanceState.getParcelable(RECYCLER_POSITION);
+
+        if (mFilterState.equals("top_rated")) {
+            loadMovieData("top_rated");
+        } else {
+            loadMovieData("popular");
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (recyclerPosition != null) {
+            recyclerView.getLayoutManager().onRestoreInstanceState(recyclerPosition);
+        }
+    }
+
     public void setMoviePosters(List<Movie> movieData) {
         movieAdapter.setMoviesData(movieData);
         movieAdapter.notifyDataSetChanged();
         recyclerView.setVisibility(View.VISIBLE);
-//        if (recyclerPosition != null) {
-//            .getLayoutManager().onRestoreInstanceState(recyclerPosition);
-//        }
+        if (recyclerPosition != null) {
+            recyclerView.getLayoutManager().onRestoreInstanceState(recyclerPosition);
+        }
     }
-
 
     public void setActionBarTitle(String title) {
         switch (title) {
